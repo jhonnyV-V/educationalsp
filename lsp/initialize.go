@@ -23,7 +23,14 @@ type InitializeResult struct {
 	Capabilities ServerCapabilities `json:"capabilities"`
 	ServerInfo   ServerInfo         `json:"serverInfo"`
 }
-type ServerCapabilities struct{}
+type ServerCapabilities struct {
+	// 0=none 1=full 2=incremental
+	TextDocumentSync   int            `json:"textDocumentSync"`
+	HoverProvider      bool           `json:"hoverProvider"`
+	DefinitionProvider bool           `json:"definitionProvider"`
+	CodeActionProvider bool           `json:"codeActionProvider"`
+	CompletionProvider map[string]any `json:"completionProvider"`
+}
 
 type ServerInfo struct {
 	Name    string `json:"name"`
@@ -37,7 +44,13 @@ func NewInitializedResponse(id int) InitializeResponse {
 			ID:  &id,
 		},
 		Result: InitializeResult{
-			Capabilities: ServerCapabilities{},
+			Capabilities: ServerCapabilities{
+				TextDocumentSync:   1,
+				HoverProvider:      true,
+				DefinitionProvider: true,
+				CodeActionProvider: true,
+				CompletionProvider: map[string]any{},
+			},
 			ServerInfo: ServerInfo{
 				Name:    "educationalsp",
 				Version: "0.0.0.0.0.1",
